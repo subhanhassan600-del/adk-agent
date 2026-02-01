@@ -1,16 +1,16 @@
-from fastapi import FastAPI
+import os
 import requests
+from dotenv import load_dotenv
 
-app = FastAPI()
+load_dotenv()
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+url = os.getenv("OLLAMA_API")
 
-@app.post("/generate")
-def generate(prompt: str):
+def llama_model(prompt: str):
     payload = {
         "model": "llama3",
         "prompt": prompt,
         "stream": False
     }
-    response = requests.post(OLLAMA_URL, json=payload)
-    return {"response": response.json()["response"]}
+    response = requests.post(url+"/api/generate", json=payload)
+    return response
